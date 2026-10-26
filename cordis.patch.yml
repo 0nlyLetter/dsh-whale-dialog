@@ -1,0 +1,3 @@
+- insert:
+    - id: whale-dialog
+      name: '@local/dsh-whale-dialog'

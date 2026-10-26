@@ -1,0 +1,52 @@
+{
+  "name": "@local/dsh-whale-dialog",
+  "version": "0.5.4",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "description": "A blue visual-novel dialogue view for the DeepSeek Harness Web GUI, with whale-girl expression portraits, mood reactions, typewriter text, and an in-frame composer toolbar.",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "visual-novel",
+    "dialogue",
+    "whale"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0nlyLetter/dsh-whale-dialog.git"
+  },
+  "homepage": "https://github.com/0nlyLetter/dsh-whale-dialog",
+  "bugs": {
+    "url": "https://github.com/0nlyLetter/dsh-whale-dialog/issues"
+  },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node tools/test_client.mjs && node tools/test_send.mjs && node tools/test_typing.mjs && node tools/test_emotion.mjs && node tools/check_css.mjs"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg"
+  ],
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": ["@deepseek-ai/dsh-client-ui-conversation"]
+    }
+  }
+}
