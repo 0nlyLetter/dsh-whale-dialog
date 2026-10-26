@@ -1,7 +1,6 @@
 {
   "name": "@local/dsh-whale-dialog",
   "version": "0.5.5",
-  "private": true,
   "license": "MIT",
   "type": "module",
   "description": "A blue visual-novel dialogue view for the DeepSeek Harness Web GUI, with whale-girl expression portraits, mood reactions, typewriter text, and an in-frame composer toolbar.",
