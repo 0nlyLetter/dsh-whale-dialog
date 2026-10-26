@@ -40,19 +40,19 @@ npm test
 
 The build reads `tools/client.template.js` and the five JPEGs in `assets/`, embeds them as data URLs, and writes the single-file client bundle `client.js`. No bundler or package installation is required.
 
-### Configure the target conversation
+### Choose the target conversation
 
-The view is intentionally session-scoped. Open `tools/client.template.js` and replace the placeholder:
+By default the view is available in **every** conversation: enable the plugin, open a conversation, and pick **鲸鱼对话** from the view switcher. No source edit is needed.
+
+To lock it to one conversation, set its id in `tools/client.template.js`:
 
 ```js
-const TARGET_SESSION = 'session-REPLACE-WITH-YOUR-SESSION-ID'
+const TARGET_SESSION = 'session-...'
 ```
 
-with the id of the conversation that should use the visual-novel view. Rebuild with `npm run build`.
+and rebuild with `npm run build`. The plugin then seeds the view preference for that session, and other sessions keep the normal chat UI with a small guard card.
 
-The session id is the id DSH uses in its conversation preference keys (`dsh.conversation.<sessionId>`); you can read it from the Web GUI's local storage or from the session URL. If the id does not match, the plugin renders a small guard card instead of taking over the transcript, and other conversations keep their normal chat UI.
-
-For a quick trial, you can point it at a session you own; there is no API key or account credential in this repository.
+The session id is the id DSH uses in its conversation preference keys (`dsh.conversation.<sessionId>`); you can read it from the Web GUI's local storage or from the session URL. For a quick trial, leave the target empty — there is no API key or account credential in this repository.
 
 ### Install as a local DSH plugin
 
@@ -64,7 +64,9 @@ This package is a DSH client plugin bundle. Place the repository folder where yo
       name: '@local/dsh-whale-dialog'
 ```
 
-Enable it in your profile and reload the Web GUI. The plugin seeds the view preference for the configured session and also registers a **鲸鱼对话** entry in the view switcher. If you change the target session later, rebuild and reload.
+Enable it in your profile and reload the Web GUI. The plugin registers a **鲸鱼对话** entry in the view switcher. Select it in any conversation, or set `TARGET_SESSION` if you want it pre-selected for one session and hidden elsewhere.
+
+The plugin can also be installed from the Git repository through the DSH **Plugins → Add plugin** dialog (choose the Git repository option and paste the repo URL); enable it afterwards. The default build needs no compile step at install time.
 
 ## Using the composer
 
@@ -126,7 +128,7 @@ The sentiment detector is a local keyword/emoji heuristic. It does not call a mo
 
 ## Known limitations
 
-- The view is gated to one configured session by design; there is no multi-session dashboard.
+- The view is available in every conversation by default; set `TARGET_SESSION` to restrict it to one. There is no multi-session dashboard.
 - Happy/sad reactions are approximate and deliberately conservative; neutral messages keep the idle portrait.
 - The in-frame composer uses a subset of the official composer (no slash-command palette, queue controls, stop button or image previews inside the frame). The official composer remains available below if you need those.
 - Tested on Windows with the DSH Web GUI's Chromium runtime; other platforms should work but are not verified.
@@ -149,6 +151,6 @@ The character artwork in `assets/` was provided by the project author and is inc
 - 框内输入栏：附件、模型、推理强度滑条（跟随鼠标、松手吸附）、权限
 - 设置页可换立绘、改名字、立绘左右、框体宽度、字号、提示音
 
-安装：`npm run build` 生成 `client.js`，把仓库目录作为本地包 `@local/dsh-whale-dialog` 接入 DSH profile，启用 `cordis.patch.yml` 里的插件行；再把 `tools/client.template.js` 里的 `TARGET_SESSION` 换成你的会话 id，重新 build。
+安装：`npm run build` 生成 `client.js`，把仓库目录作为本地包 `@local/dsh-whale-dialog` 接入 DSH profile，启用 `cordis.patch.yml` 里的插件行。默认所有对话都能用，从视图菜单选「鲸鱼对话」即可；如果只想限定某个会话，再把 `tools/client.template.js` 里的 `TARGET_SESSION` 换成会话 id 并重新 build。
 
 代码使用 MIT 协议；`assets/` 中的角色图片仅用于本项目展示，不在 MIT 授权范围内。

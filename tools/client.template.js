@@ -6,7 +6,10 @@ window.__ModuleLoader__.load({
     const { useState, useEffect, useMemo, useRef, useCallback } = React
 
     const VIEW_ID = 'whale-dialog'
-    const TARGET_SESSION = 'session-REPLACE-WITH-YOUR-SESSION-ID'
+    // Leave empty to make the view available in every conversation.
+    // Set a session id to restrict the visual-novel view to that one conversation.
+    const TARGET_SESSION = ''
+    const CHARACTER_OWNER = TARGET_SESSION === '' ? 'default' : TARGET_SESSION
     const CONVERSATION_KEY = 'dsh.conversation'
     const LOCAL_PREFIX = 'dsh.whale-dialog'
     const DEFAULT_NAME = 'deepseek'
@@ -337,8 +340,8 @@ window.__ModuleLoader__.load({
 
     function readCharacter() {
       return {
-        portrait: readLocal(TARGET_SESSION, 'portrait') || DEFAULT_PORTRAIT,
-        name: readLocal(TARGET_SESSION, 'name') || DEFAULT_NAME
+        portrait: readLocal(CHARACTER_OWNER, 'portrait') || DEFAULT_PORTRAIT,
+        name: readLocal(CHARACTER_OWNER, 'name') || DEFAULT_NAME
       }
     }
 
@@ -355,12 +358,12 @@ window.__ModuleLoader__.load({
       }
       const changed = next.portrait !== currentCharacter.portrait || next.name !== currentCharacter.name
       if (patch.portrait !== undefined) {
-        if (next.portrait === DEFAULT_PORTRAIT) removeLocal(TARGET_SESSION, 'portrait')
-        else writeLocal(TARGET_SESSION, 'portrait', next.portrait)
+        if (next.portrait === DEFAULT_PORTRAIT) removeLocal(CHARACTER_OWNER, 'portrait')
+        else writeLocal(CHARACTER_OWNER, 'portrait', next.portrait)
       }
       if (patch.name !== undefined) {
-        if (next.name === DEFAULT_NAME) removeLocal(TARGET_SESSION, 'name')
-        else writeLocal(TARGET_SESSION, 'name', next.name)
+        if (next.name === DEFAULT_NAME) removeLocal(CHARACTER_OWNER, 'name')
+        else writeLocal(CHARACTER_OWNER, 'name', next.name)
       }
       currentCharacter = next
       if (changed) for (const listener of characterListeners) listener()
@@ -533,6 +536,7 @@ window.__ModuleLoader__.load({
 
     /** Seed the target session's persisted View preference once, before the session store materializes. */
     function seedViewPreference() {
+      if (TARGET_SESSION === '') return
       try {
         const key = CONVERSATION_KEY + '.' + TARGET_SESSION
         const raw = window.localStorage.getItem(key)
@@ -1206,7 +1210,7 @@ window.__ModuleLoader__.load({
 
     function WhaleDialog(props) {
       const sessionId = props.sessionId
-      const isTarget = sessionId === TARGET_SESSION
+      const isTarget = TARGET_SESSION === '' || sessionId === TARGET_SESSION
       const useChat = props.useChat
       const useSessionStatus = props.useSessionStatus
       const openView = props.openView

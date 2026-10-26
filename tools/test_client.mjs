@@ -70,9 +70,7 @@ if (options.id !== 'whale-dialog') throw new Error('unexpected view id: ' + opti
 if (registered === null || settingsPage === null) throw new Error('components were not captured')
 
 const seeded = storage.get('dsh.conversation.' + TARGET)
-if (seeded === undefined) throw new Error('view preference was not seeded')
-const seededState = JSON.parse(seeded)
-if (seededState.view !== 'whale-dialog') throw new Error('seed did not set the view: ' + seeded)
+if (seeded !== undefined) throw new Error('view preference should not be seeded when TARGET_SESSION is empty')
 
 function makeSnapshot(entries) {
   const map = new Map(entries.map((node, index) => [node.key ?? 'n' + index, node]))
@@ -188,7 +186,8 @@ if (!streamingText.includes('正在回应')) throw new Error('running HUD missin
 
 const foreignTree = render({ sessionId: 'session-other', snapshot: makeSnapshot([]), running: false })
 const foreignText = textOf(foreignTree)
-if (!foreignText.includes('仅在本对话中启用')) throw new Error('foreign session guard missing')
+if (foreignText.includes('仅在本对话中启用')) throw new Error('unexpected guard when TARGET_SESSION is empty')
+if (!foreignText.includes('今天想和你聊点什么')) throw new Error('view should render in every session by default')
 
 const emptyTree = render({ snapshot: makeSnapshot([]), running: false })
 const emptyText = textOf(emptyTree)
@@ -242,5 +241,5 @@ const stage = findElements(sizeTree, (element) => typeof element.props.className
 if (stage.props.style['--wd-font-size'] !== '20px') throw new Error('font size setting was not applied: ' + JSON.stringify(stage.props.style))
 
 console.log('all client checks passed')
-console.log('seeded preference:', seeded)
+console.log('TARGET_SESSION empty: view available in every session')
 console.log('view label:', options.label)
