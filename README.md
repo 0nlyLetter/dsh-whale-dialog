@@ -1,62 +1,53 @@
-# Whale Dialog
+# 鲸鱼对话 · Whale Dialog
 
-A blue visual-novel dialogue view for the **DeepSeek Harness (DSH) Web GUI**. It replaces the ordinary chat transcript with a single dialogue frame, a whale-girl portrait that reacts to the conversation, and an in-frame composer — while keeping the conversation's memory intact.
+> **测试版 / Beta：0.15.0-beta.1**
+>
+> 这是一个供体验和反馈的测试版本，不是正式版。功能、界面和数据格式都可能继续调整。
+> 欢迎把体验问题或想法发到 [Issues](https://github.com/0nlyLetter/dsh-whale-dialog/issues)。
 
-Made by [0nlyLetter](https://github.com/0nlyLetter).
+一个面向 **DeepSeek Harness (DSH) Web GUI** 的蓝色视觉小说式对话插件。
+它把普通聊天记录替换成一幅海底舞台、一个会变化表情的鲸鱼少女，以及一个留在画面里的输入框，同时保留原会话的记忆。
 
-<img src="assets/expr-idle.jpg" width="240" alt="Whale-girl idle portrait" />
+![15 种表情的鲸鱼少女立绘预览](assets/emotion-preview.gif)
 
-| Idle | Thinking | Speaking | Happy | Sad |
-| --- | --- | --- | --- | --- |
-| <img src="assets/expr-idle.jpg" width="120" /> | <img src="assets/expr-thinking.jpg" width="120" /> | <img src="assets/expr-speaking-new.jpg" width="120" /> | <img src="assets/expr-happy.jpg" width="120" /> | <img src="assets/expr-sad.jpg" width="120" /> |
+![15 种表情总览](assets/emotion-contact.png)
 
-[中文说明](#中文说明)
+## 这个版本有什么
 
-## Features
+- **侧栏原生入口**：在 DSH 侧栏新增「鲸鱼对话」，点开后先在原生页面里选择要使用的会话。
+- **会话选择**：当前主会话会优先选中，也可以搜索并切换到其他会话；选好后进入该会话的鲸鱼对话。
+- **15 种表情**：待机、思考、开心、伤心、生气、害羞、认真、调皮、困倦、惊讶、满足、生气大喊、噘嘴、乖巧、好困。
+- **自动情绪**：根据用户消息里的夸奖、表白、责怪、抱怨、玩笑、惊讶、犯困等线索自动切换表情；生成回复时也会根据请求类型切换基础状态。
+- **角色形象库**：默认角色是一张独立的长方形选项卡；可以用「+ 新建角色形象」创建其他角色，每个角色有独立的名字、15 张表情、缩放和焦点。
+- **蓝色海底舞台**：分层海水、光束、鲸影、鱼群、气泡、海草和柔和光晕；支持减少动态效果。
+- **蓝白画框**：双层斜切边框、蝴蝶结、蕾丝、铆钉、纸鲸水印和居中的名字牌。
+- **打字机显示**：点击文字可以立即显示全文；减少动态效果时直接显示完整文本。
+- **提示音**：新回复到达时播放轻提示音，可关闭或调整音量。
+- **画面内输入栏**：文本发送、附件、模型选择、推理强度和权限切换都留在对话框里。
+- **整页历史**：可以打开完整的对话记录，不再只保留最新一条。
+- **人设库**：启用人设后会自动把保存的人设代码注入输入；关闭时自动卸载。
+- **设置分类**：角色与立绘、外观、声音、行为等分组，不再是一长串设置项。
 
-- **One reply at a time** — the latest assistant turn is shown in a visual-novel frame; earlier content is replaced visually, not deleted from the conversation.
-- **Undersea stage** — layered water light, god rays, drifting whale silhouettes, a small school of fish, bubbles, a seabed silhouette and kelp, plus a soft glow behind the frame. Slow CSS animations, with a reduced-motion fallback.
-- **Blue-and-white frame** — beveled double frame, ribbon bow, lace trim, rivets, a paper-whale watermark and a centered name plate under the portrait.
-- **Five expressions** — idle, thinking, speaking, happy and sad. The first three follow the turn lifecycle (waiting / replying / idle); happy and sad are selected from the latest user message with a small keyword-and-emoji sentiment heuristic, then shown for a few seconds after the reply settles.
-- **Typewriter reveal** — a click (or a click on the text) reveals the whole reply immediately; reduced-motion users get the full text at once.
-- **Soft chime** — a short Web Audio chime on a new assistant turn; can be disabled in settings.
-- **In-frame composer** — text + send, attachments, model selector, reasoning-effort slider and permission switcher, without leaving the dialogue box.
-- **Settings page** — upload a portrait, change the name, move the portrait to either side, adjust frame width and font size, toggle the chime.
+## 安装
 
-## Requirements
+### 从 Git 仓库安装（推荐）
 
-- A DSH installation with the Web GUI and client plugin bundles (`conversation.view` / `settings.section` slots).
-- Node.js 18+ for building and testing. The plugin itself has no runtime dependencies.
-- A modern Chromium-based browser for the Web GUI.
+1. 打开 DSH Web GUI。
+2. 进入 **插件 → 添加插件**。
+3. 选择 Git 仓库，填入：
 
-## Quick start
+   ```text
+   https://github.com/0nlyLetter/dsh-whale-dialog
+   ```
 
-```bash
-git clone https://github.com/0nlyLetter/dsh-whale-dialog.git
-cd dsh-whale-dialog
-npm run build
-npm test
-```
+4. 安装完成后启用 `@local/dsh-whale-dialog`。
+5. 刷新 Web GUI。
 
-The build reads `tools/client.template.js` and the five JPEGs in `assets/`, embeds them as data URLs, and writes the single-file client bundle `client.js`. No bundler or package installation is required.
+这个仓库已经包含构建好的 `client.js`，**不需要额外安装依赖或执行构建**。
 
-### Choose the target conversation
+### 本地安装
 
-By default the view is available in **every** conversation: enable the plugin, open a conversation, and pick **鲸鱼对话** from the view switcher. No source edit is needed.
-
-To lock it to one conversation, set its id in `tools/client.template.js`:
-
-```js
-const TARGET_SESSION = 'session-...'
-```
-
-and rebuild with `npm run build`. The plugin then seeds the view preference for that session, and other sessions keep the normal chat UI with a small guard card.
-
-The session id is the id DSH uses in its conversation preference keys (`dsh.conversation.<sessionId>`); you can read it from the Web GUI's local storage or from the session URL. For a quick trial, leave the target empty — there is no API key or account credential in this repository.
-
-### Install as a local DSH plugin
-
-This package is a DSH client plugin bundle. Place the repository folder where your DSH profile can resolve the package name `@local/dsh-whale-dialog` (a link or copy into the profile's local package area is enough), then register the bundle row shipped in `cordis.patch.yml`:
+把仓库放到 DSH profile 能解析到 `@local/dsh-whale-dialog` 的位置（软链接或复制到本地包目录都可以），然后在 profile 的 bundle 配置中加入：
 
 ```yaml
 - insert:
@@ -64,93 +55,76 @@ This package is a DSH client plugin bundle. Place the repository folder where yo
       name: '@local/dsh-whale-dialog'
 ```
 
-Enable it in your profile and reload the Web GUI. The plugin registers a **鲸鱼对话** entry in the view switcher. Select it in any conversation, or set `TARGET_SESSION` if you want it pre-selected for one session and hidden elsewhere.
+启用后刷新 Web GUI。
 
-The plugin can also be installed from the Git repository through the DSH **Plugins → Add plugin** dialog (choose the Git repository option and paste the repo URL); enable it afterwards. The default build needs no compile step at install time.
+## 使用
 
-## Using the composer
+- **侧栏入口**：点击侧栏「鲸鱼对话」，选择会话，然后点「进入鲸鱼对话」。
+- **视图标签**：也可以打开会话后，点击会话上方的「鲸鱼对话」标签。
+- **当前主会话**：会话选择页会优先选中当前主会话，并显示「当前主会话」标记。
+- **切换会话**：回到侧栏入口重新选择即可；角色和设置沿用当前配置。
 
-The in-frame bar mirrors the important parts of the official DSH composer:
+## 15 种表情
 
-- **Attachments** — images and files enter the same draft-attachment pipeline as the official composer. They upload in the background; the send button stays disabled until the uploads are ready, and failed uploads are marked on the chip.
-- **Model** — lists the session's available models grouped by provider, using the same per-session model directory as the official composer. The choice applies to the next request.
-- **Reasoning effort** — a magnet slider: the thumb follows the pointer continuously, and on release it glides to the nearest advertised effort level. Click a tick or use the arrow keys to move one level at a time.
-- **Permission** — switches the current session through the official `/permission` command. Read Only / Workspace Write / Full access are offered; Full access asks for a second confirmation first.
+| 状态 | 名称 | 状态 | 名称 | 状态 | 名称 |
+| --- | --- | --- | --- | --- | --- |
+| 待机 | 待机 | 思考 | 思考 | 开心 | 开心 |
+| 伤心 | 伤心 | 生气 | 生气 | 害羞 | 害羞 |
+| 认真 | 认真 | 调皮 | 调皮 | 困倦 | 困倦 |
+| 惊讶 | 惊讶 | 满足 | 满足 | 生气大喊 | 生气大喊 |
+| 噘嘴 | 噘嘴 | 乖巧 | 乖巧 | 好困 | 好困 |
 
-## Settings
+表情立绘都在 `assets/emotion-*.jpg`，可以替换成自己的角色图；插件会把它们内嵌进 `client.js`。
 
-Open the gear at the top-right of the view (or the plugin's settings section):
+## 自动情绪规则
 
-- portrait upload with preview and confirm
-- name plate text (default `deepseek`)
-- portrait on the left or right
-- frame width and dialogue font size
-- chime on/off
+当前使用轻量的关键词与文本特征判断，不调用额外模型：
 
-Settings are stored in `localStorage` under `dsh.whale-dialog.settings`; the portrait and name use per-session keys when a target session is configured.
+- 夸奖 → 开心
+- 表白、喜欢 → 害羞
+- 责怪、失望 → 伤心
+- 轻度抱怨 → 噘嘴
+- 强烈冒犯、喊叫 → 生气 / 生气大喊
+- 惊讶 → 惊讶
+- 玩笑、调侃 → 调皮
+- 犯困、疲惫 → 困倦
+- 生成回复时：请求 / 委托 → 乖巧；技术 / 提问 → 认真；日常 → 满足
+- 长时间安静后 → 好困
 
-## Project layout
+这些规则是测试版的一部分，后续会根据反馈调整。
 
-```
-.
-├─ client.js                 generated single-file client bundle (committed)
-├─ cordis.patch.yml          bundle patch that inserts the plugin row
-├─ index.js                  host half (no host behaviour)
-├─ icon.svg
-├─ locale/{en,zh}.json
-├─ assets/                   five square portrait JPEGs
-├─ tools/
-│  ├─ client.template.js     source of truth for the client plugin
-│  ├─ build.mjs              embeds the portraits and writes client.js
-│  ├─ test_client.mjs        render / portrait / settings checks
-│  ├─ test_send.mjs          send path and in-view settings checks
-│  ├─ test_typing.mjs        typewriter reveal checks
-│  ├─ test_emotion.mjs       mood reaction checks
-│  └─ check_css.mjs          CSS structure check
-└─ package.json
-```
+## 设置
 
-## Development notes
+设置分为几个分类：
 
-- `npm run build` is idempotent: it always regenerates `client.js` from the template and assets.
-- `npm test` runs tiny fake-React harnesses against the generated bundle; no browser is required.
-- The client is a single ES module loaded through `window.__ModuleLoader__.load(...)`. It registers:
-  - `conversation.view` (id `whale-dialog`, order 20) — the visual-novel view;
-  - `settings.section` (id `whale-dialog`, order 40) — the settings page.
-- Character art lives in `assets/`; replace the five JPEGs (ideally square) and rebuild to use your own.
-- The composer controls rely on DSH client services (`modelDirectories`, `conversation`) and the `/permission` command. They are intentionally thin adapters; if a future DSH release changes those internals, the text/send path and the view still work, while a control may need updating.
+- **角色与立绘**：角色形象库、默认角色、新建角色、15 种表情替换与恢复、缩放和焦点。
+- **外观**：画框宽度、字体大小、肖像位置、纸面 / 磨砂质感、鼠标视差。
+- **声音**：提示音开关与音量。
+- **行为**：自动情绪、表情保持时间等。
 
-## Security and privacy
+角色、设置、人设和表情数据保存在浏览器本地存储中，不会上传到第三方服务。
 
-No API keys, tokens or credentials are included in this repository. The plugin runs entirely in the Web GUI and uses the host's existing authentication; it never reads or stores provider credentials. Preferences and portraits are kept in the browser's `localStorage`.
+## 数据与隐私
 
-The sentiment detector is a local keyword/emoji heuristic. It does not call a model and does not send your messages anywhere.
+- 插件不包含 API key、账号凭据或服务器地址。
+- 聊天内容只通过 DSH 本身的会话通道发送。
+- 角色立绘、设置、人设保存在当前浏览器的 localStorage。
+- 表情图片会以 data URL 形式保存在插件包和本地存储中。
+- 如果你要清空角色或设置，可以在浏览器开发者工具中清除对应站点的 localStorage；测试版暂未提供一键导入 / 导出。
 
-## Known limitations
+## Beta 说明
 
-- The view is available in every conversation by default; set `TARGET_SESSION` to restrict it to one. There is no multi-session dashboard.
-- Happy/sad reactions are approximate and deliberately conservative; neutral messages keep the idle portrait.
-- The in-frame composer uses a subset of the official composer (no slash-command palette, queue controls, stop button or image previews inside the frame). The official composer remains available below if you need those.
-- Tested on Windows with the DSH Web GUI's Chromium runtime; other platforms should work but are not verified.
-- The reasoning-effort slider only appears when the selected model advertises effort levels.
+当前版本是 **0.15.0-beta.1**，主要用于收集体验反馈：
+
+- 不是正式版，功能、交互和数据结构可能变化。
+- 如果后续版本调整了存储结构，测试版中的角色或设置可能需要重新配置。
+- 如果遇到问题，请附上 DSH 版本、浏览器和复现步骤发到 Issues。
+
+## 反馈
+
+- Issues：<https://github.com/0nlyLetter/dsh-whale-dialog/issues>
+- 作者：[@0nlyLetter](https://github.com/0nlyLetter)
 
 ## License
 
-The source code is released under the [MIT License](LICENSE).
-
-The character artwork in `assets/` was provided by the project author and is included for this project's demonstration. It is not covered by the MIT license; please ask the author before reusing the artwork elsewhere.
-
-## 中文说明
-
-这是一个给 **DeepSeek Harness Web GUI** 用的蓝色视觉小说对话框插件：把普通聊天记录换成一屏一句的对话框、右侧角色立绘和框内输入栏，同时保留完整对话记忆。
-
-- 海底舞台：水面光、光柱、远处的鲸鱼、鱼群、气泡、海床与海草
-- 蓝白双层框体：蝴蝶结、蕾丝边、铆钉、纸鲸鱼水印、立绘下方的居中名字牌
-- 五套表情：待机、思考、说话、开心、难过；开心/难过按你最近一句话的情绪粗略判断
-- 逐字浮现，点击立即显示全文；新回复有轻提示音
-- 框内输入栏：附件、模型、推理强度滑条（跟随鼠标、松手吸附）、权限
-- 设置页可换立绘、改名字、立绘左右、框体宽度、字号、提示音
-
-安装：`npm run build` 生成 `client.js`，把仓库目录作为本地包 `@local/dsh-whale-dialog` 接入 DSH profile，启用 `cordis.patch.yml` 里的插件行。默认所有对话都能用，从视图菜单选「鲸鱼对话」即可；如果只想限定某个会话，再把 `tools/client.template.js` 里的 `TARGET_SESSION` 换成会话 id 并重新 build。
-
-代码使用 MIT 协议；`assets/` 中的角色图片仅用于本项目展示，不在 MIT 授权范围内。
+MIT

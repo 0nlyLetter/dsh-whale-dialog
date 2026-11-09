@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Whale Dialog",
-    "description": "A blue visual-novel dialogue box in a layered undersea scene, with five whale-girl expressions and mood-driven reactions, plus an in-frame composer toolbar for attachments, permission, model and reasoning-effort selection."
+    "description": "A blue visual-novel dialogue box with a native sidebar shortcut and session chooser before entering the whale view; multiple character appearances each with a name and fifteen emotion portraits; automatic expressions driven by praise, affection, blame, jokes, surprise, tiredness, request type and idle time; plus personas, history, frosted-panel and parallax options, immersive fullscreen, and chime volume."
   }
 }
