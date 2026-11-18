@@ -1,9 +1,9 @@
 {
   "name": "@local/dsh-whale-dialog",
-  "version": "0.15.0-beta.1",
+  "version": "0.15.9beta",
   "license": "MIT",
   "type": "module",
-  "description": "[Beta] A blue visual-novel dialogue view for the DeepSeek Harness Web GUI, with a native sidebar shortcut and session chooser, fifteen emotion portraits, automatic mood reactions, a character library, personas, a conversation-history page, and an in-frame composer.",
+  "description": "Blue visual-novel dialogue view with a native sidebar shortcut and session chooser, a background picker with illustration and classic previews (bubbles preserved), IndexedDB character storage, character packs, JSON backup, diagnostics and one-click feedback, fifteen emotion portraits, automatic expressions, personas, history and an in-frame composer.",
   "keywords": [
     "dsh",
     "deepseek-harness",
